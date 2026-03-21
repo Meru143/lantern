@@ -70,13 +70,13 @@
 - [x] Migration 7: `CREATE INDEX IF NOT EXISTS idx_logs_service ON log_records(service_name, timestamp)`
 
 ### 1.6 Event Bus
-- [ ] Create `internal/bus/eventbus.go`
-- [ ] Define `EventType` const: `EventTypeSpan`, `EventTypeLog`, `EventTypeError`
-- [ ] Define `Event` struct: `{ Type EventType; Payload interface{} }`
-- [ ] Implement `EventBus` with `mu sync.RWMutex`, `subs map[string]chan Event`
-- [ ] Implement `Subscribe(id string, bufSize int) chan Event`
-- [ ] Implement `Unsubscribe(id string)`
-- [ ] Implement `Publish(e Event)` — iterate subs, non-blocking send with `select { case ch <- e: default: }` to avoid blocking publisher
+- [x] Create `internal/bus/eventbus.go`
+- [x] Define `EventType` const: `EventTypeSpan`, `EventTypeLog`, `EventTypeError`
+- [x] Define `Event` struct: `{ Type EventType; Payload interface{} }`
+- [x] Implement `EventBus` with `mu sync.RWMutex`, `subs map[string]chan Event`
+- [x] Implement `Subscribe(id string, bufSize int) chan Event`
+- [x] Implement `Unsubscribe(id string)`
+- [x] Implement `Publish(e Event)` — iterate subs, non-blocking send with `select { case ch <- e: default: }` to avoid blocking publisher
 
 ### 1.7 Build & Release
 - [ ] Create `.goreleaser.yml` targeting linux/amd64, linux/arm64, darwin/amd64, darwin/arm64, windows/amd64
@@ -301,10 +301,10 @@
 - [ ] Test NormalizeSQL: string literals replaced
 
 ### 9.2 Bus Tests
-- [ ] Create `internal/bus/eventbus_test.go`
-- [ ] Test Subscribe + Publish: subscriber receives event
-- [ ] Test Unsubscribe: subscriber stops receiving after unsubscribe
-- [ ] Test non-blocking publish: slow subscriber doesn't block publisher
+- [x] Create `internal/bus/eventbus_test.go`
+- [x] Test Subscribe + Publish: subscriber receives event
+- [x] Test Unsubscribe: subscriber stops receiving after unsubscribe
+- [x] Test non-blocking publish: slow subscriber doesn't block publisher
 
 ### 9.3 Config Tests
 - [ ] Test LoadConfig returns correct defaults
