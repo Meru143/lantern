@@ -30,7 +30,7 @@
      otlpreceiver down to v0.114.0 because otlpreceiver v0.144.0 requires
      pdata v1.50.0. Keeping the buildable graph visible here pending
      reconciliation with the PRD's version matrix. -->
-- [ ] `go get modernc.org/sqlite@v1.34.0`
+- [x] `go get modernc.org/sqlite@v1.34.0`
 - [ ] `go get github.com/Masterminds/squirrel@v1.5.4`
 - [ ] `go get github.com/go-chi/chi/v5@v5.2.0`
 - [ ] `go get github.com/gorilla/websocket@v1.5.3`
