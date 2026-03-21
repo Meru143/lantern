@@ -39,7 +39,7 @@ var (
 	tabStyle = lipgloss.NewStyle().
 			Padding(0, 2).
 			Foreground(lipgloss.Color("#9BA9B7"))
-	activeTabStyle = tabStyle.Copy().
+	activeTabStyle = tabStyle.
 			Foreground(lipgloss.Color("#111417")).
 			Background(lipgloss.Color("#FFD166")).
 			Bold(true)

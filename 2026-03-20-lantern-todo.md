@@ -310,30 +310,30 @@
 - [x] Test non-blocking publish: slow subscriber doesn't block publisher
 
 ### 9.3 Config Tests
-- [ ] Test LoadConfig returns correct defaults
-- [ ] Test env var `LANTERN_UI_PORT=9000` overrides default
-- [ ] Test `~` expansion in DBPath
+- [x] Test LoadConfig returns correct defaults
+- [x] Test env var `LANTERN_UI_PORT=9000` overrides default
+- [x] Test `~` expansion in DBPath
 
 ---
 
 ## Phase 10: Integration Tests
 
 ### 10.1 OTLP Integration
-- [ ] Create `test/integration/otlp_test.go`
-- [ ] Start lantern with temp DB and random ports
-- [ ] Send 5 spans using `otlptracegrpc.New()` exporter pointed at test GRPC port
-- [ ] Assert `store.GetTrace()` returns 5 spans
-- [ ] Assert `/api/traces` REST response contains trace ID
+- [x] Create `test/integration/otlp_test.go`
+- [x] Start lantern with temp DB and random ports
+- [x] Send 5 spans using `otlptracegrpc.New()` exporter pointed at test GRPC port
+- [x] Assert `store.GetTrace()` returns 5 spans
+- [x] Assert `/api/traces` REST response contains trace ID
 
 ### 10.2 WebSocket Integration
-- [ ] Send span to OTLP receiver
-- [ ] Connect WebSocket client to `/api/stream`
-- [ ] Assert event received within 2 seconds
+- [x] Send span to OTLP receiver
+- [x] Connect WebSocket client to `/api/stream`
+- [x] Assert event received within 2 seconds
 
 ### 10.3 Retention Test
-- [ ] Insert 10 spans with timestamps 25 hours ago
-- [ ] Run cleanup with 24h retention
-- [ ] Assert spans deleted
+- [x] Insert 10 spans with timestamps 25 hours ago
+- [x] Run cleanup with 24h retention
+- [x] Assert spans deleted
 
 ---
 

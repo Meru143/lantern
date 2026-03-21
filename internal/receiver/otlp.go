@@ -39,7 +39,9 @@ func Start(ctx context.Context, cfg *config.Config, signalConsumer *SignalConsum
 	receiverConfig.HTTP.Endpoint = httpEndpoint
 
 	settings := collectorreceiver.Settings{
-		ID: component.MustNewID("otlp"),
+		ID:                component.MustNewID("otlp"),
+		TelemetrySettings: componenttest.NewNopTelemetrySettings(),
+		BuildInfo:         component.NewDefaultBuildInfo(),
 	}
 
 	traceReceiver, err := factory.CreateTraces(ctx, settings, receiverConfig, signalConsumer)
