@@ -1,0 +1,30 @@
+# Build outputs
+bin/
+dist/
+
+# Go artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.out
+
+# Local data and snapshots
+*.db
+*.db-shm
+*.db-wal
+*.lantern
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+
+# Local agent metadata
+.agent/
+.agents/
+.claude/
+skills-lock.json
