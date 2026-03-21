@@ -7,8 +7,6 @@ import (
 )
 
 func TestSnapshotCommandRegistersExpectedFlags(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"snapshot"})
 	require.NoError(t, err)
 	require.NotNil(t, command)
@@ -18,8 +16,6 @@ func TestSnapshotCommandRegistersExpectedFlags(t *testing.T) {
 }
 
 func TestReplayCommandExists(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"replay"})
 	require.NoError(t, err)
 	require.NotNil(t, command)
@@ -27,8 +23,6 @@ func TestReplayCommandExists(t *testing.T) {
 }
 
 func TestInitCommandExists(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"init"})
 	require.NoError(t, err)
 	require.NotNil(t, command)
@@ -36,8 +30,6 @@ func TestInitCommandExists(t *testing.T) {
 }
 
 func TestClearCommandExists(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"clear"})
 	require.NoError(t, err)
 	require.NotNil(t, command)
@@ -45,8 +37,6 @@ func TestClearCommandExists(t *testing.T) {
 }
 
 func TestConfigShowCommandExists(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"config", "show"})
 	require.NoError(t, err)
 	require.NotNil(t, command)

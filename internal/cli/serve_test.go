@@ -7,8 +7,6 @@ import (
 )
 
 func TestServeCommandRegistersExpectedFlags(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"serve"})
 	require.NoError(t, err)
 	require.NotNil(t, command)
@@ -22,8 +20,6 @@ func TestServeCommandRegistersExpectedFlags(t *testing.T) {
 }
 
 func TestTUICommandExists(t *testing.T) {
-	t.Parallel()
-
 	command, _, err := rootCmd.Find([]string{"tui"})
 	require.NoError(t, err)
 	require.NotNil(t, command)
