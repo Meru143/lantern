@@ -24,7 +24,7 @@
 ### 1.2 Install Dependencies
 - [x] `go get github.com/spf13/cobra@v1.9.0`
 - [x] `go get github.com/spf13/viper@v1.20.0`
-- [ ] `go get go.opentelemetry.io/collector/receiver/otlpreceiver@v0.144.0`
+- [x] `go get go.opentelemetry.io/collector/receiver/otlpreceiver@v0.144.0`
 - [ ] `go get go.opentelemetry.io/collector/pdata@v1.20.0`
 - [ ] `go get modernc.org/sqlite@v1.34.0`
 - [ ] `go get github.com/Masterminds/squirrel@v1.5.4`
