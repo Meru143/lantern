@@ -32,7 +32,7 @@
      reconciliation with the PRD's version matrix. -->
 - [x] `go get modernc.org/sqlite@v1.34.0`
 - [x] `go get github.com/Masterminds/squirrel@v1.5.4`
-- [ ] `go get github.com/go-chi/chi/v5@v5.2.0`
+- [x] `go get github.com/go-chi/chi/v5@v5.2.0`
 - [ ] `go get github.com/gorilla/websocket@v1.5.3`
 - [ ] `go get github.com/charmbracelet/bubbletea@v1.3.0`
 - [ ] `go get github.com/charmbracelet/lipgloss@v1.1.0`
