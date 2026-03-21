@@ -15,18 +15,18 @@ var sqliteBuilder = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Questio
 
 // SpanRecord stores a single span as persisted in SQLite.
 type SpanRecord struct {
-	TraceID       string
-	SpanID        string
-	ParentSpanID  string
-	ServiceName   string
-	Name          string
-	Kind          int32
-	StartTimeUnix int64
-	EndTimeUnix   int64
-	StatusCode    int32
-	StatusMessage string
-	Attributes    string
-	Events        string
+	TraceID       string `json:"traceId"`
+	SpanID        string `json:"spanId"`
+	ParentSpanID  string `json:"parentSpanId"`
+	ServiceName   string `json:"serviceName"`
+	Name          string `json:"name"`
+	Kind          int32  `json:"kind"`
+	StartTimeUnix int64  `json:"startTimeUnix"`
+	EndTimeUnix   int64  `json:"endTimeUnix"`
+	StatusCode    int32  `json:"statusCode"`
+	StatusMessage string `json:"statusMessage"`
+	Attributes    string `json:"attributes"`
+	Events        string `json:"events"`
 }
 
 // TraceFilter filters trace list queries.
@@ -152,6 +152,53 @@ func GetTrace(ctx context.Context, db *sql.DB, traceID string) ([]SpanRecord, er
 	}
 
 	return spans, nil
+}
+
+// GetSpanByID returns a single span by span ID.
+func GetSpanByID(ctx context.Context, db *sql.DB, spanID string) (*SpanRecord, error) {
+	query, args, err := sqliteBuilder.
+		Select(
+			"trace_id",
+			"span_id",
+			"parent_span_id",
+			"service_name",
+			"name",
+			"kind",
+			"start_time",
+			"end_time",
+			"status_code",
+			"status_message",
+			"attributes",
+			"events",
+		).
+		From("spans").
+		Where(squirrel.Eq{"span_id": spanID}).
+		Limit(1).
+		ToSql()
+	if err != nil {
+		return nil, fmt.Errorf("build span query: %w", err)
+	}
+
+	var span SpanRecord
+	err = db.QueryRowContext(ctx, query, args...).Scan(
+		&span.TraceID,
+		&span.SpanID,
+		&span.ParentSpanID,
+		&span.ServiceName,
+		&span.Name,
+		&span.Kind,
+		&span.StartTimeUnix,
+		&span.EndTimeUnix,
+		&span.StatusCode,
+		&span.StatusMessage,
+		&span.Attributes,
+		&span.Events,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &span, nil
 }
 
 // ListTraces returns trace summaries ordered by most recent start time.

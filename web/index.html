@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>lantern</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="masthead">
+        <div>
+          <p class="eyebrow">Local Observability Platform</p>
+          <h1>lantern</h1>
+          <p class="subhead">Traces, logs, services, queries, and grouped failures from one local binary.</p>
+        </div>
+        <div class="live-status" aria-live="polite">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>Live</span>
+          <strong id="live-count">0</strong>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="Primary">
+        <button class="tab is-active" data-tab="traces" type="button">Traces</button>
+        <button class="tab" data-tab="logs" type="button">Logs</button>
+        <button class="tab" data-tab="services" type="button">Services</button>
+        <button class="tab" data-tab="errors" type="button">Errors</button>
+        <button class="tab" data-tab="queries" type="button">Queries</button>
+      </nav>
+
+      <main class="content-grid">
+        <section class="panel stack" id="filters-panel">
+          <h2>Filters</h2>
+          <div id="traces-filters" class="filters stack" data-filters="traces">
+            <label class="field">
+              <span>Service</span>
+              <select id="trace-service">
+                <option value="">All services</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Min duration</span>
+              <input id="trace-duration" type="text" placeholder="50ms" />
+            </label>
+            <label class="field check">
+              <input id="trace-errors" type="checkbox" />
+              <span>Only errors</span>
+            </label>
+            <button id="refresh-traces" class="button" type="button">Refresh traces</button>
+          </div>
+
+          <div id="logs-filters" class="filters stack is-hidden" data-filters="logs">
+            <label class="field">
+              <span>Service</span>
+              <select id="log-service">
+                <option value="">All services</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Severity</span>
+              <select id="log-severity">
+                <option value="">Any</option>
+                <option value="5">DEBUG+</option>
+                <option value="9">INFO+</option>
+                <option value="13">WARN+</option>
+                <option value="17">ERROR+</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Search</span>
+              <input id="log-search" type="text" placeholder="checkout failed" />
+            </label>
+            <button id="refresh-logs" class="button" type="button">Refresh logs</button>
+          </div>
+        </section>
+
+        <section class="panel" id="primary-panel">
+          <div class="tab-panel" data-panel="traces">
+            <div class="section-head">
+              <h2>Trace list</h2>
+              <p>Click a trace to inspect a stitched waterfall timeline.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th><button class="sort-button" data-trace-sort="service" type="button">Service</button></th>
+                    <th><button class="sort-button" data-trace-sort="name" type="button">Trace</button></th>
+                    <th><button class="sort-button" data-trace-sort="duration" type="button">Duration</button></th>
+                    <th><button class="sort-button" data-trace-sort="spans" type="button">Spans</button></th>
+                    <th><button class="sort-button" data-trace-sort="time" type="button">Time</button></th>
+                  </tr>
+                </thead>
+                <tbody id="traces-table"></tbody>
+              </table>
+            </div>
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="section-head tight">
+                  <h3>Waterfall</h3>
+                  <p id="trace-detail-title">Select a trace</p>
+                </div>
+                <svg id="waterfall" class="waterfall" viewBox="0 0 1000 220" role="img" aria-label="Trace waterfall"></svg>
+              </div>
+              <div class="detail-card">
+                <div class="section-head tight">
+                  <h3>Span detail</h3>
+                  <p>Attributes, events, and status for the selected span.</p>
+                </div>
+                <pre id="span-detail" class="json-view">Select a span to inspect its payload.</pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-panel is-hidden" data-panel="logs">
+            <div class="section-head">
+              <h2>Unified logs</h2>
+              <p>Chronological service logs with trace correlation.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Service</th>
+                    <th>Severity</th>
+                    <th>Body</th>
+                    <th>Trace</th>
+                  </tr>
+                </thead>
+                <tbody id="logs-table"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tab-panel is-hidden" data-panel="services">
+            <div class="section-head">
+              <h2>Service graph</h2>
+              <p>Cross-service calls assembled from trace parent/child relationships.</p>
+            </div>
+            <svg id="services-graph" class="graph" viewBox="0 0 1000 480" role="img" aria-label="Service dependency graph"></svg>
+          </div>
+
+          <div class="tab-panel is-hidden" data-panel="errors">
+            <div class="section-head">
+              <h2>Error groups</h2>
+              <p>Grouped exceptions across spans, services, and time.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Message</th>
+                    <th>Count</th>
+                    <th>First seen</th>
+                    <th>Last seen</th>
+                    <th>Services</th>
+                  </tr>
+                </thead>
+                <tbody id="errors-table"></tbody>
+              </table>
+            </div>
+            <pre id="error-detail" class="json-view">Select an error group to inspect its sample span.</pre>
+          </div>
+
+          <div class="tab-panel is-hidden" data-panel="queries">
+            <div class="section-head">
+              <h2>Query analysis</h2>
+              <p>Normalized SQL grouped by latency and repeat count.</p>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>SQL</th>
+                    <th>Count</th>
+                    <th>P95</th>
+                    <th>P99</th>
+                    <th>Max</th>
+                  </tr>
+                </thead>
+                <tbody id="queries-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js" defer></script>
+  </body>
+  </html>

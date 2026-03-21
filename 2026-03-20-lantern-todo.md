@@ -155,71 +155,74 @@
 ## Phase 4: HTTP API Server
 
 ### 4.1 Server Setup
-- [ ] Create `internal/api/server.go`
-- [ ] Embed `web/` directory: `//go:embed web/* var webAssets embed.FS`
-- [ ] Initialize `chi.NewRouter()` with `middleware.Logger`, `middleware.Recoverer`, `middleware.CORS`
-- [ ] Mount static assets: `r.Handle("/*", http.FileServer(http.FS(webAssets)))`
-- [ ] Mount API routes under `/api/`
-- [ ] Start with `http.ListenAndServe(fmt.Sprintf(":%d", port), r)`
+- [x] Create `internal/api/server.go`
+<!-- Note: `chi/v5` does not provide `middleware.CORS`; the server uses an
+     equivalent local CORS middleware. Embedded assets live in `web/assets.go`
+     so `server.go` stays focused on routing/lifecycle. -->
+- [x] Embed `web/` directory: `//go:embed web/* var webAssets embed.FS`
+- [x] Initialize `chi.NewRouter()` with `middleware.Logger`, `middleware.Recoverer`, `middleware.CORS`
+- [x] Mount static assets: `r.Handle("/*", http.FileServer(http.FS(webAssets)))`
+- [x] Mount API routes under `/api/`
+- [x] Start with `http.ListenAndServe(fmt.Sprintf(":%d", port), r)`
 
 ### 4.2 Traces Handlers
-- [ ] Create `internal/api/traces.go`
-- [ ] `GET /api/traces` — parse query params: `service`, `hasError`, `minDuration`, `limit`, `offset`; call `store.ListTraces()`; return JSON array
-- [ ] `GET /api/traces/{traceId}` — call `store.GetTrace()`; return full trace with spans as tree
+- [x] Create `internal/api/traces.go`
+- [x] `GET /api/traces` — parse query params: `service`, `hasError`, `minDuration`, `limit`, `offset`; call `store.ListTraces()`; return JSON array
+- [x] `GET /api/traces/{traceId}` — call `store.GetTrace()`; return full trace with spans as tree
 
 ### 4.3 Logs Handler
-- [ ] `GET /api/logs` — parse query params: `service`, `severity`, `traceId`, `search`, `limit`, `offset`; call `store.ListLogs()`
+- [x] `GET /api/logs` — parse query params: `service`, `severity`, `traceId`, `search`, `limit`, `offset`; call `store.ListLogs()`
 
 ### 4.4 Services Handler
-- [ ] `GET /api/services` — query `SELECT DISTINCT service_name FROM spans`; build dependency graph by querying cross-service span relationships; return `{ services: [], edges: [{from, to, count, errorRate}] }`
+- [x] `GET /api/services` — query `SELECT DISTINCT service_name FROM spans`; build dependency graph by querying cross-service span relationships; return `{ services: [], edges: [{from, to, count, errorRate}] }`
 
 ### 4.5 Errors Handler
-- [ ] `GET /api/errors` — call `store.ListErrorGroups()`
-- [ ] `GET /api/errors/{fingerprint}` — get group + sample span
+- [x] `GET /api/errors` — call `store.ListErrorGroups()`
+- [x] `GET /api/errors/{fingerprint}` — get group + sample span
 
 ### 4.6 Queries Handler
-- [ ] `GET /api/queries` — call `store.ListSlowQueries(limit=20)`
+- [x] `GET /api/queries` — call `store.ListSlowQueries(limit=20)`
 
 ### 4.7 WebSocket Stream
-- [ ] Create `internal/api/stream.go`
-- [ ] `GET /api/stream` — upgrade to WebSocket using `gorilla/websocket`
-- [ ] Subscribe to `bus.EventBus` with a unique subscriber ID (UUID)
-- [ ] For each event: marshal to JSON, write to WebSocket connection
-- [ ] On disconnect: call `bus.Unsubscribe(id)`, close channel
+- [x] Create `internal/api/stream.go`
+- [x] `GET /api/stream` — upgrade to WebSocket using `gorilla/websocket`
+- [x] Subscribe to `bus.EventBus` with a unique subscriber ID (UUID)
+- [x] For each event: marshal to JSON, write to WebSocket connection
+- [x] On disconnect: call `bus.Unsubscribe(id)`, close channel
 
 ---
 
 ## Phase 5: Web UI
 
 ### 5.1 Base HTML
-- [ ] Create `web/index.html` with tab navigation: Traces | Logs | Services | Errors | Queries
-- [ ] Add WebSocket connection script that reconnects on disconnect
-- [ ] Add live badge counter that increments on WebSocket events
+- [x] Create `web/index.html` with tab navigation: Traces | Logs | Services | Errors | Queries
+- [x] Add WebSocket connection script that reconnects on disconnect
+- [x] Add live badge counter that increments on WebSocket events
 
 ### 5.2 Traces Tab
-- [ ] Fetch `GET /api/traces` on load, render as sortable table: Service, Trace Name, Duration, Spans, Time
-- [ ] Click row → fetch `GET /api/traces/:id` → render waterfall view (SVG timeline)
-- [ ] Waterfall: each span as a horizontal bar, position = (startTime - traceStart) / traceDuration, width = spanDuration / traceDuration
-- [ ] Color spans by service (consistent color per service name)
-- [ ] Show span detail panel on span click (attributes, events, status)
+- [x] Fetch `GET /api/traces` on load, render as sortable table: Service, Trace Name, Duration, Spans, Time
+- [x] Click row → fetch `GET /api/traces/:id` → render waterfall view (SVG timeline)
+- [x] Waterfall: each span as a horizontal bar, position = (startTime - traceStart) / traceDuration, width = spanDuration / traceDuration
+- [x] Color spans by service (consistent color per service name)
+- [x] Show span detail panel on span click (attributes, events, status)
 
 ### 5.3 Logs Tab
-- [ ] Fetch and render log records with service badge, severity badge, timestamp, body
-- [ ] Severity color coding: ERROR=red, WARN=yellow, INFO=blue, DEBUG=gray
-- [ ] Filter controls: service dropdown, severity dropdown, search input
-- [ ] Click trace ID badge → navigate to trace waterfall
+- [x] Fetch and render log records with service badge, severity badge, timestamp, body
+- [x] Severity color coding: ERROR=red, WARN=yellow, INFO=blue, DEBUG=gray
+- [x] Filter controls: service dropdown, severity dropdown, search input
+- [x] Click trace ID badge → navigate to trace waterfall
 
 ### 5.4 Services Tab
-- [ ] Render service dependency graph as SVG with circles (services) and arrows (calls)
-- [ ] Show call count on each arrow
-- [ ] Error rate coloring: green < 1%, yellow 1-5%, red >5%
+- [x] Render service dependency graph as SVG with circles (services) and arrows (calls)
+- [x] Show call count on each arrow
+- [x] Error rate coloring: green < 1%, yellow 1-5%, red >5%
 
 ### 5.5 Errors Tab
-- [ ] Render error groups: exception type, normalized message, count, first/last seen, services
-- [ ] Click row → show sample stack trace
+- [x] Render error groups: exception type, normalized message, count, first/last seen, services
+- [x] Click row → show sample stack trace
 
 ### 5.6 Queries Tab
-- [ ] Render DB query stats table: normalized SQL, count, P95 latency, max latency
+- [x] Render DB query stats table: normalized SQL, count, P95 latency, max latency
 
 ---
 
