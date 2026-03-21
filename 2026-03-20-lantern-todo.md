@@ -148,7 +148,7 @@
 - [x] Implement `RunCleanup(ctx context.Context, db *sql.DB, retention time.Duration) error`
 - [x] Parse retention string to `time.Duration`
 - [x] Call `DeleteTracesOlderThan`, `DeleteLogsOlderThan`, `DeleteOldDBSpans`
-- [ ] Schedule via `time.NewTicker(1 * time.Hour)` in `serve` command
+- [x] Schedule via `time.NewTicker(1 * time.Hour)` in `serve` command
 
 ---
 
@@ -229,27 +229,27 @@
 ## Phase 6: TUI
 
 ### 6.1 Root TUI Model
-- [ ] Create `internal/tui/model.go`
-- [ ] Define `model` struct: `activeTab int`, `tabs []tabModel`, `width int`, `height int`
-- [ ] Implement `tea.Model` interface: `Init()`, `Update(tea.Msg)`, `View() string`
-- [ ] Handle `tea.WindowSizeMsg` to resize child models
-- [ ] Tab bar rendered with lipgloss: active tab highlighted
+- [x] Create `internal/tui/model.go`
+- [x] Define `model` struct: `activeTab int`, `tabs []tabModel`, `width int`, `height int`
+- [x] Implement `tea.Model` interface: `Init()`, `Update(tea.Msg)`, `View() string`
+- [x] Handle `tea.WindowSizeMsg` to resize child models
+- [x] Tab bar rendered with lipgloss: active tab highlighted
 
 ### 6.2 Traces Tab TUI
-- [ ] Create `internal/tui/traces.go` implementing tab interface
-- [ ] Use `bubbles/table` to render trace list
-- [ ] Columns: Service, Name, Duration, Spans, Error
-- [ ] On Enter: fetch full trace, render waterfall as ASCII bars using lipgloss
+- [x] Create `internal/tui/traces.go` implementing tab interface
+- [x] Use `bubbles/table` to render trace list
+- [x] Columns: Service, Name, Duration, Spans, Error
+- [x] On Enter: fetch full trace, render waterfall as ASCII bars using lipgloss
 
 ### 6.3 Logs Tab TUI
-- [ ] Create `internal/tui/logs.go`
-- [ ] Use `bubbles/viewport` for scrollable log stream
-- [ ] Prepend new log lines as WebSocket events arrive
-- [ ] Color severity levels with lipgloss styles
+- [x] Create `internal/tui/logs.go`
+- [x] Use `bubbles/viewport` for scrollable log stream
+- [x] Prepend new log lines as WebSocket events arrive
+- [x] Color severity levels with lipgloss styles
 
 ### 6.4 Services + Errors TUI
-- [ ] Create `internal/tui/services.go` — ASCII adjacency list of services and call counts
-- [ ] Create `internal/tui/errors.go` — table of error groups, expandable to show sample trace
+- [x] Create `internal/tui/services.go` — ASCII adjacency list of services and call counts
+- [x] Create `internal/tui/errors.go` — table of error groups, expandable to show sample trace
 
 ---
 
@@ -274,16 +274,16 @@
 ## Phase 8: `lantern serve` Command
 
 ### 8.1 Serve Orchestration
-- [ ] Create `internal/cli/serve.go`
-- [ ] Parse flags: `--otlp-grpc`, `--otlp-http`, `--ui-port`, `--retention`, `--db`, `--no-tui`
-- [ ] Call `store.Open(dbPath)` and `store.RunMigrations()`
-- [ ] Start `bus.NewEventBus()`
-- [ ] Start OTLP receiver via `receiver.Start()`
-- [ ] Start retention cleanup ticker
-- [ ] Start HTTP API server via `api.Start()`
-- [ ] If not `--no-tui`: launch `tea.NewProgram(tui.NewModel(...))` in goroutine
-- [ ] Block on `signal.NotifyContext` for SIGINT/SIGTERM
-- [ ] On shutdown: stop receiver, close DB, exit 0
+- [x] Create `internal/cli/serve.go`
+- [x] Parse flags: `--otlp-grpc`, `--otlp-http`, `--ui-port`, `--retention`, `--db`, `--no-tui`
+- [x] Call `store.Open(dbPath)` and `store.RunMigrations()`
+- [x] Start `bus.NewEventBus()`
+- [x] Start OTLP receiver via `receiver.Start()`
+- [x] Start retention cleanup ticker
+- [x] Start HTTP API server via `api.Start()`
+- [x] If not `--no-tui`: launch `tea.NewProgram(tui.NewModel(...))` in goroutine
+- [x] Block on `signal.NotifyContext` for SIGINT/SIGTERM
+- [x] On shutdown: stop receiver, close DB, exit 0
 
 ---
 
