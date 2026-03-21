@@ -89,26 +89,26 @@
 ## Phase 2: OTLP Receiver
 
 ### 2.1 Consumer Implementation
-- [ ] Create `internal/receiver/consumer.go`
-- [ ] Define `SignalConsumer` struct implementing `consumer.Traces` and `consumer.Logs`
-- [ ] Implement `ConsumeTraces(ctx context.Context, td pdata.Traces) error`
-- [ ] In `ConsumeTraces`: iterate `td.ResourceSpans()`, extract service name from `resource.Attributes().Get("service.name")`
-- [ ] For each span: build `SpanRecord`, call `store.InsertSpan()`
-- [ ] Detect DB spans: check `span.Kind() == ptrace.SpanKindClient` and `span.Attributes().Get("db.system")`
-- [ ] Implement `ConsumeCapabilities() consumer.Capabilities { return consumer.Capabilities{MutatesData: false} }`
-- [ ] Implement `ConsumeLogs(ctx context.Context, ld pdata.Logs) error`
-- [ ] Iterate `ld.ResourceLogs()`, extract service name, build `LogRecord`, call `store.InsertLog()`
-- [ ] After each successful insert, publish event to `bus.EventBus`
+- [x] Create `internal/receiver/consumer.go`
+- [x] Define `SignalConsumer` struct implementing `consumer.Traces` and `consumer.Logs`
+- [x] Implement `ConsumeTraces(ctx context.Context, td pdata.Traces) error`
+- [x] In `ConsumeTraces`: iterate `td.ResourceSpans()`, extract service name from `resource.Attributes().Get("service.name")`
+- [x] For each span: build `SpanRecord`, call `store.InsertSpan()`
+- [x] Detect DB spans: check `span.Kind() == ptrace.SpanKindClient` and `span.Attributes().Get("db.system")`
+- [x] Implement `ConsumeCapabilities() consumer.Capabilities { return consumer.Capabilities{MutatesData: false} }`
+- [x] Implement `ConsumeLogs(ctx context.Context, ld pdata.Logs) error`
+- [x] Iterate `ld.ResourceLogs()`, extract service name, build `LogRecord`, call `store.InsertLog()`
+- [x] After each successful insert, publish event to `bus.EventBus`
 
 ### 2.2 OTLP Receiver Startup
-- [ ] Create `internal/receiver/otlp.go`
-- [ ] Implement `Start(ctx context.Context, cfg *config.Config, consumer *SignalConsumer) error`
-- [ ] Build `otlpreceiver.Config` with grpc endpoint `0.0.0.0:<port>` and http endpoint `0.0.0.0:<port>`
-- [ ] Use `otlpreceiver.NewFactory()` to create factory
-- [ ] Call `factory.CreateTraces(ctx, receiverSettings, cfg, consumer)` — store returned receiver
-- [ ] Call `factory.CreateLogs(ctx, receiverSettings, cfg, consumer)` — store returned receiver
-- [ ] Call `receiver.Start(ctx, componenttest.NewNopHost())` for each
-- [ ] Return first `net.Listen` error as `LT001`/`LT002` appropriately
+- [x] Create `internal/receiver/otlp.go`
+- [x] Implement `Start(ctx context.Context, cfg *config.Config, consumer *SignalConsumer) error`
+- [x] Build `otlpreceiver.Config` with grpc endpoint `0.0.0.0:<port>` and http endpoint `0.0.0.0:<port>`
+- [x] Use `otlpreceiver.NewFactory()` to create factory
+- [x] Call `factory.CreateTraces(ctx, receiverSettings, cfg, consumer)` — store returned receiver
+- [x] Call `factory.CreateLogs(ctx, receiverSettings, cfg, consumer)` — store returned receiver
+- [x] Call `receiver.Start(ctx, componenttest.NewNopHost())` for each
+- [x] Return first `net.Listen` error as `LT001`/`LT002` appropriately
 
 ---
 
