@@ -38,7 +38,7 @@
 - [x] `go get github.com/charmbracelet/lipgloss@v1.1.0`
 - [x] `go get github.com/charmbracelet/bubbles@v0.20.0`
 - [x] `go get go.uber.org/zap@v1.27.0`
-- [ ] `go get github.com/stretchr/testify@v1.10.0`
+- [x] `go get github.com/stretchr/testify@v1.10.0`
 - [ ] `go get github.com/testcontainers/testcontainers-go@v0.35.0`
 - [ ] Run `go mod tidy`
 
