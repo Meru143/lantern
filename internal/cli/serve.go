@@ -53,28 +53,29 @@ func runServe(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	db, err := store.Open(cfg.DBPath)
+	return runRuntime(cfg, true, !serveNoTUI)
+}
+
+func runRuntime(cfg *config.Config, withReceiver bool, enableTUI bool) error {
+	db, err := openRuntimeDB(cfg.DBPath)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	if err := store.RunMigrations(db); err != nil {
-		return err
-	}
-
 	eventBus := bus.NewEventBus()
-	consumer := receiver.NewSignalConsumer(db, eventBus)
-
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	if err := receiver.Start(ctx, cfg, consumer); err != nil {
-		return err
+	if withReceiver {
+		consumer := receiver.NewSignalConsumer(db, eventBus)
+		if err := receiver.Start(ctx, cfg, consumer); err != nil {
+			return err
+		}
+		defer func() {
+			_ = receiver.Shutdown(context.Background())
+		}()
 	}
-	defer func() {
-		_ = receiver.Shutdown(context.Background())
-	}()
 
 	if err := api.Start(ctx, db, eventBus, cfg.UIPort); err != nil {
 		return err
@@ -93,7 +94,7 @@ func runServe(cmd *cobra.Command, args []string) error {
 	go runCleanupLoop(ctx, cleanupStop, db, retention)
 
 	var program *tea.Program
-	if !serveNoTUI {
+	if enableTUI {
 		program = tea.NewProgram(tui.NewModel(db, eventBus), tea.WithAltScreen())
 		go func() {
 			_, _ = program.Run()
@@ -107,8 +108,10 @@ func runServe(cmd *cobra.Command, args []string) error {
 	if program != nil {
 		program.Send(tea.Quit())
 	}
-	if err := receiver.Shutdown(context.Background()); err != nil {
-		shutdownErr = errors.Join(shutdownErr, err)
+	if withReceiver {
+		if err := receiver.Shutdown(context.Background()); err != nil {
+			shutdownErr = errors.Join(shutdownErr, err)
+		}
 	}
 	if err := api.Shutdown(context.Background()); err != nil {
 		shutdownErr = errors.Join(shutdownErr, err)
@@ -118,17 +121,9 @@ func runServe(cmd *cobra.Command, args []string) error {
 }
 
 func mergedServeConfig(cmd *cobra.Command) (*config.Config, error) {
-	cfg := &config.Config{}
-	if appConfig != nil {
-		*cfg = *appConfig
-	} else {
-		cfg = &config.Config{
-			OTLPGRPCPort: 4317,
-			OTLPHTTPPort: 4318,
-			UIPort:       4000,
-			Retention:    "24h",
-			DBPath:       "~/.lantern/data.db",
-		}
+	cfg, err := baseCLIConfig()
+	if err != nil {
+		return nil, err
 	}
 
 	if cmd.Flags().Changed("otlp-grpc") {
@@ -145,6 +140,29 @@ func mergedServeConfig(cmd *cobra.Command) (*config.Config, error) {
 	}
 	if cmd.Flags().Changed("db") {
 		cfg.DBPath = serveDBPath
+	}
+
+	expandedDBPath, err := expandCLIPath(cfg.DBPath)
+	if err != nil {
+		return nil, err
+	}
+	cfg.DBPath = expandedDBPath
+
+	return cfg, nil
+}
+
+func baseCLIConfig() (*config.Config, error) {
+	cfg := &config.Config{}
+	if appConfig != nil {
+		*cfg = *appConfig
+	} else {
+		cfg = &config.Config{
+			OTLPGRPCPort: 4317,
+			OTLPHTTPPort: 4318,
+			UIPort:       4000,
+			Retention:    "24h",
+			DBPath:       "~/.lantern/data.db",
+		}
 	}
 
 	expandedDBPath, err := expandCLIPath(cfg.DBPath)

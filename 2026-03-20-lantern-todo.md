@@ -256,18 +256,18 @@
 ## Phase 7: Snapshot
 
 ### 7.1 Export
-- [ ] Create `internal/snapshot/export.go`
-- [ ] Implement `Export(ctx context.Context, dbPath string, duration time.Duration, outPath string) error`
-- [ ] Open source SQLite, run `VACUUM INTO tempPath` to copy
-- [ ] Copy only records within `duration` window: create filtered copy DB, insert filtered records
-- [ ] Create ZIP file at `outPath` containing: `data.db`, `meta.json`
-- [ ] `meta.json`: `{ version: "1", exportedAt: ISO8601, durationSeconds: N, spansCount: N, logsCount: N }`
+- [x] Create `internal/snapshot/export.go`
+- [x] Implement `Export(ctx context.Context, dbPath string, duration time.Duration, outPath string) error`
+- [x] Open source SQLite, run `VACUUM INTO tempPath` to copy
+- [x] Copy only records within `duration` window: create filtered copy DB, insert filtered records
+- [x] Create ZIP file at `outPath` containing: `data.db`, `meta.json`
+- [x] `meta.json`: `{ version: "1", exportedAt: ISO8601, durationSeconds: N, spansCount: N, logsCount: N }`
 
 ### 7.2 Import/Replay
-- [ ] Create `internal/snapshot/import.go`
-- [ ] Implement `Import(bundlePath string, targetDBPath string) error`
-- [ ] Unzip bundle, validate `meta.json` version
-- [ ] Copy `data.db` from bundle to `targetDBPath`
+- [x] Create `internal/snapshot/import.go`
+- [x] Implement `Import(bundlePath string, targetDBPath string) error`
+- [x] Unzip bundle, validate `meta.json` version
+- [x] Copy `data.db` from bundle to `targetDBPath`
 
 ---
 
