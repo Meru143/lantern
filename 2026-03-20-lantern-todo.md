@@ -19,10 +19,10 @@
 - [x] Create `cmd/lantern/main.go` with `func main() { cli.Execute() }`
 - [x] Create `README.md`, `LICENSE` (MIT), `.gitignore`, `CHANGELOG.md`
 - [x] Create all directories: `internal/cli`, `internal/receiver`, `internal/store`, `internal/api`, `internal/tui`, `internal/snapshot`, `internal/bus`, `internal/config`, `web/`, `test/integration/`, `test/fixtures/`
-- [ ] Run `git init && git commit -m "chore: initial scaffold"`
+- [x] Run `git init && git commit -m "chore: initial scaffold"`
 
 ### 1.2 Install Dependencies
-- [ ] `go get github.com/spf13/cobra@v1.9.0`
+- [x] `go get github.com/spf13/cobra@v1.9.0`
 - [ ] `go get github.com/spf13/viper@v1.20.0`
 - [ ] `go get go.opentelemetry.io/collector/receiver/otlpreceiver@v0.144.0`
 - [ ] `go get go.opentelemetry.io/collector/pdata@v1.20.0`
