@@ -42,6 +42,14 @@ var baseMigrations = []string{
 		services TEXT,
 		sample_span_id TEXT
 	)`,
+	`CREATE TABLE IF NOT EXISTS db_queries (
+		normalized TEXT PRIMARY KEY,
+		raw_sample TEXT,
+		count INTEGER,
+		total_duration INTEGER,
+		max_duration INTEGER,
+		trace_ids TEXT
+	)`,
 	`CREATE INDEX IF NOT EXISTS idx_spans_trace_id ON spans(trace_id)`,
 	`CREATE INDEX IF NOT EXISTS idx_spans_service ON spans(service_name, start_time)`,
 	`CREATE INDEX IF NOT EXISTS idx_logs_trace_id ON log_records(trace_id)`,

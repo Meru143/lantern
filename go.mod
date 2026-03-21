@@ -3,6 +3,7 @@ module github.com/Meru143/lantern
 go 1.24.0
 
 require (
+	github.com/Masterminds/squirrel v1.5.4
 	github.com/spf13/cobra v1.9.0
 	github.com/spf13/viper v1.20.0
 	go.uber.org/zap v1.27.0
@@ -17,6 +18,8 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
+	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v1.0.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect

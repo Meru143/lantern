@@ -115,39 +115,39 @@
 ## Phase 3: Data Stores
 
 ### 3.1 Trace Store
-- [ ] Create `internal/store/traces.go`
-- [ ] Implement `InsertSpan(ctx context.Context, s SpanRecord) error` using squirrel `INSERT OR REPLACE`
-- [ ] Implement `GetTrace(ctx context.Context, traceID string) ([]SpanRecord, error)` querying by trace_id, ordered by start_time ASC
-- [ ] Implement `ListTraces(ctx context.Context, filter TraceFilter) ([]TraceSummary, error)` — GROUP BY trace_id, get min(start_time), max(end_time), count(*), service_names, has_error
-- [ ] `TraceFilter` struct: `ServiceName string`, `HasError bool`, `MinDuration time.Duration`, `Limit int`, `Offset int`
-- [ ] Implement `DeleteTracesOlderThan(ctx context.Context, cutoff time.Time) error` with batched DELETE LIMIT 500
+- [x] Create `internal/store/traces.go`
+- [x] Implement `InsertSpan(ctx context.Context, s SpanRecord) error` using squirrel `INSERT OR REPLACE`
+- [x] Implement `GetTrace(ctx context.Context, traceID string) ([]SpanRecord, error)` querying by trace_id, ordered by start_time ASC
+- [x] Implement `ListTraces(ctx context.Context, filter TraceFilter) ([]TraceSummary, error)` — GROUP BY trace_id, get min(start_time), max(end_time), count(*), service_names, has_error
+- [x] `TraceFilter` struct: `ServiceName string`, `HasError bool`, `MinDuration time.Duration`, `Limit int`, `Offset int`
+- [x] Implement `DeleteTracesOlderThan(ctx context.Context, cutoff time.Time) error` with batched DELETE LIMIT 500
 
 ### 3.2 Log Store
-- [ ] Create `internal/store/logs.go`
-- [ ] Implement `InsertLog(ctx context.Context, l LogRecord) error`
-- [ ] Implement `ListLogs(ctx context.Context, filter LogFilter) ([]LogRecord, error)`
-- [ ] `LogFilter` struct: `ServiceName string`, `MinSeverity int32`, `TraceID string`, `Search string`, `Limit int`, `Offset int`
-- [ ] For `Search`, use `WHERE body LIKE '%' || ? || '%'`
+- [x] Create `internal/store/logs.go`
+- [x] Implement `InsertLog(ctx context.Context, l LogRecord) error`
+- [x] Implement `ListLogs(ctx context.Context, filter LogFilter) ([]LogRecord, error)`
+- [x] `LogFilter` struct: `ServiceName string`, `MinSeverity int32`, `TraceID string`, `Search string`, `Limit int`, `Offset int`
+- [x] For `Search`, use `WHERE body LIKE '%' || ? || '%'`
 
 ### 3.3 Error Store
-- [ ] Create `internal/store/errors.go`
-- [ ] Implement `FingerprintError(excType, excMessage string) string` — normalize message (strip numbers, UUIDs, hashes), SHA256 hash of (excType + normalized)
-- [ ] Implement `UpsertErrorGroup(ctx context.Context, spanID, excType, excMessage, service string) error`
-- [ ] On insert conflict (same fingerprint): increment count, update last_seen, append service to services JSON array
-- [ ] Implement `ListErrorGroups(ctx context.Context) ([]ErrorGroup, error)` ordered by count DESC
+- [x] Create `internal/store/errors.go`
+- [x] Implement `FingerprintError(excType, excMessage string) string` — normalize message (strip numbers, UUIDs, hashes), SHA256 hash of (excType + normalized)
+- [x] Implement `UpsertErrorGroup(ctx context.Context, spanID, excType, excMessage, service string) error`
+- [x] On insert conflict (same fingerprint): increment count, update last_seen, append service to services JSON array
+- [x] Implement `ListErrorGroups(ctx context.Context) ([]ErrorGroup, error)` ordered by count DESC
 
 ### 3.4 DB Query Store
-- [ ] Create `internal/store/queries.go`
-- [ ] Implement `NormalizeSQL(query string) string` — replace numeric literals with `?`, string literals with `'?'`, UUIDs with `<uuid>`
-- [ ] Implement `RecordDBSpan(ctx context.Context, s SpanRecord) error` — extract `db.statement` attribute, normalize, upsert into `db_queries` table
-- [ ] Migration: `CREATE TABLE IF NOT EXISTS db_queries (normalized TEXT PRIMARY KEY, raw_sample TEXT, count INTEGER, total_duration INTEGER, max_duration INTEGER, trace_ids TEXT)`
-- [ ] Implement `ListSlowQueries(ctx context.Context, limit int) ([]DBQueryStat, error)` ordered by max_duration DESC
+- [x] Create `internal/store/queries.go`
+- [x] Implement `NormalizeSQL(query string) string` — replace numeric literals with `?`, string literals with `'?'`, UUIDs with `<uuid>`
+- [x] Implement `RecordDBSpan(ctx context.Context, s SpanRecord) error` — extract `db.statement` attribute, normalize, upsert into `db_queries` table
+- [x] Migration: `CREATE TABLE IF NOT EXISTS db_queries (normalized TEXT PRIMARY KEY, raw_sample TEXT, count INTEGER, total_duration INTEGER, max_duration INTEGER, trace_ids TEXT)`
+- [x] Implement `ListSlowQueries(ctx context.Context, limit int) ([]DBQueryStat, error)` ordered by max_duration DESC
 
 ### 3.5 Retention Cleanup
-- [ ] Create `internal/store/cleanup.go`
-- [ ] Implement `RunCleanup(ctx context.Context, db *sql.DB, retention time.Duration) error`
-- [ ] Parse retention string to `time.Duration`
-- [ ] Call `DeleteTracesOlderThan`, `DeleteLogsOlderThan`, `DeleteOldDBSpans`
+- [x] Create `internal/store/cleanup.go`
+- [x] Implement `RunCleanup(ctx context.Context, db *sql.DB, retention time.Duration) error`
+- [x] Parse retention string to `time.Duration`
+- [x] Call `DeleteTracesOlderThan`, `DeleteLogsOlderThan`, `DeleteOldDBSpans`
 - [ ] Schedule via `time.NewTicker(1 * time.Hour)` in `serve` command
 
 ---
@@ -287,18 +287,18 @@
 ## Phase 9: Unit Tests
 
 ### 9.1 Store Tests
-- [ ] Create `internal/store/traces_test.go`
-- [ ] Test InsertSpan + GetTrace round-trip (5 spans same trace)
-- [ ] Test ListTraces filter by service name
-- [ ] Test ListTraces filter by hasError=true
-- [ ] Test DeleteTracesOlderThan removes old records
-- [ ] Create `internal/store/errors_test.go`
-- [ ] Test FingerprintError: same inputs → same fingerprint
-- [ ] Test FingerprintError: different exception type → different fingerprint
-- [ ] Test FingerprintError: message with UUID → normalized matches message without UUID
-- [ ] Create `internal/store/queries_test.go`
-- [ ] Test NormalizeSQL: `SELECT * FROM users WHERE id = 123` → `SELECT * FROM users WHERE id = ?`
-- [ ] Test NormalizeSQL: string literals replaced
+- [x] Create `internal/store/traces_test.go`
+- [x] Test InsertSpan + GetTrace round-trip (5 spans same trace)
+- [x] Test ListTraces filter by service name
+- [x] Test ListTraces filter by hasError=true
+- [x] Test DeleteTracesOlderThan removes old records
+- [x] Create `internal/store/errors_test.go`
+- [x] Test FingerprintError: same inputs → same fingerprint
+- [x] Test FingerprintError: different exception type → different fingerprint
+- [x] Test FingerprintError: message with UUID → normalized matches message without UUID
+- [x] Create `internal/store/queries_test.go`
+- [x] Test NormalizeSQL: `SELECT * FROM users WHERE id = 123` → `SELECT * FROM users WHERE id = ?`
+- [x] Test NormalizeSQL: string literals replaced
 
 ### 9.2 Bus Tests
 - [x] Create `internal/bus/eventbus_test.go`
