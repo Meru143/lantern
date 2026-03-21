@@ -79,10 +79,10 @@
 - [x] Implement `Publish(e Event)` — iterate subs, non-blocking send with `select { case ch <- e: default: }` to avoid blocking publisher
 
 ### 1.7 Build & Release
-- [ ] Create `.goreleaser.yml` targeting linux/amd64, linux/arm64, darwin/amd64, darwin/arm64, windows/amd64
-- [ ] Create `Makefile` with: `build`, `test`, `test-integration`, `lint`, `docker`, `release-dry`
-- [ ] Create `.github/workflows/ci.yml` with lint + test + build jobs
-- [ ] Create `.github/workflows/release.yml` with goreleaser on tag push
+- [x] Create `.goreleaser.yml` targeting linux/amd64, linux/arm64, darwin/amd64, darwin/arm64, windows/amd64
+- [x] Create `Makefile` with: `build`, `test`, `test-integration`, `lint`, `docker`, `release-dry`
+- [x] Create `.github/workflows/ci.yml` with lint + test + build jobs
+- [x] Create `.github/workflows/release.yml` with goreleaser on tag push
 
 ---
 
@@ -340,33 +340,33 @@
 ## Phase 11: CI/CD
 
 ### 11.1 GitHub Actions CI
-- [ ] Create `.github/workflows/ci.yml`
-- [ ] Job: `golangci-lint run ./...`
-- [ ] Job: `go test ./internal/...`
-- [ ] Job: `go test ./test/integration/... -tags integration` (Docker required)
-- [ ] Job: `go build ./cmd/lantern/`
-- [ ] Upload Codecov
+- [x] Create `.github/workflows/ci.yml`
+- [x] Job: `golangci-lint run ./...`
+- [x] Job: `go test ./internal/...`
+- [x] Job: `go test ./test/integration/... -tags integration` (Docker required)
+- [x] Job: `go build ./cmd/lantern/`
+- [x] Upload Codecov
 
 ### 11.2 Release
-- [ ] `.github/workflows/release.yml` on tag `v*`
-- [ ] `goreleaser release --clean`
-- [ ] Push Docker image to ghcr.io
+- [x] `.github/workflows/release.yml` on tag `v*`
+- [x] `goreleaser release --clean`
+- [x] Push Docker image to ghcr.io
 
 ### 11.3 Makefile
-- [ ] `make build`, `make test`, `make test-integration`, `make lint`, `make docker`, `make release-dry`
+- [x] `make build`, `make test`, `make test-integration`, `make lint`, `make docker`, `make release-dry`
 
 ---
 
 ## Phase 12: Documentation
 
 ### 12.1 README.md
-- [ ] Demo GIF showing traces appearing in web UI
-- [ ] "Point your OTEL exporter at localhost:4317 and run lantern serve"
-- [ ] SDK configuration examples: Go, Node.js, Python (OTEL env vars)
-- [ ] Installation section: go install, Homebrew, Docker
-- [ ] Screenshots of trace waterfall, log stream, error groups
+- [x] Demo GIF showing traces appearing in web UI
+- [x] "Point your OTEL exporter at localhost:4317 and run lantern serve"
+- [x] SDK configuration examples: Go, Node.js, Python (OTEL env vars)
+- [x] Installation section: go install, Homebrew, Docker
+- [x] Screenshots of trace waterfall, log stream, error groups
 
 ### 12.2 Community Files
-- [ ] CONTRIBUTING.md with dev setup (docker-compose.dev.yml for test services)
-- [ ] SECURITY.md, CODE_OF_CONDUCT.md
-- [ ] Issue templates, PR template, .editorconfig
+- [x] CONTRIBUTING.md with dev setup (docker-compose.dev.yml for test services)
+- [x] SECURITY.md, CODE_OF_CONDUCT.md
+- [x] Issue templates, PR template, .editorconfig

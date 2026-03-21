@@ -1,0 +1,14 @@
+FROM gcr.io/distroless/static-debian12:nonroot
+
+ARG TARGETPLATFORM
+
+ENV HOME=/home/nonroot
+WORKDIR /home/nonroot
+
+COPY $TARGETPLATFORM/lantern /usr/bin/lantern
+
+EXPOSE 4317 4318 4000
+VOLUME ["/home/nonroot/.lantern"]
+
+ENTRYPOINT ["/usr/bin/lantern"]
+CMD ["serve", "--no-tui", "--db", "/home/nonroot/.lantern/data.db"]

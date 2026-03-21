@@ -1,0 +1,17 @@
+{
+  "name": "lantern",
+  "dockerComposeFile": "../docker-compose.dev.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.go",
+        "ms-python.python",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "postCreateCommand": "go mod download"
+}

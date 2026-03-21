@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About lantern</title>
+    <meta
+      name="description"
+      content="About lantern, a local-first observability interface for OpenTelemetry traces and logs."
+    />
+    <link rel="canonical" href="/about" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="app-shell content-page">
+      <section class="panel prose-card">
+        <p class="eyebrow">About</p>
+        <h1>lantern keeps local telemetry local.</h1>
+        <p>
+          lantern exists for the part of observability that usually happens before a pull request or an incident review.
+          You instrument an app, point the OpenTelemetry SDK at localhost, and want the trace waterfall, the log stream,
+          the service edges, and the repeated failure groups without standing up a collector stack or sending data to a
+          hosted vendor.
+        </p>
+        <p>
+          The project packages that flow into one binary. The OTLP receiver listens on the standard developer ports, the
+          SQLite store keeps the session portable, and the snapshot command turns a recent debugging window into a bundle
+          you can replay on another machine.
+        </p>
+        <nav class="footer-links" aria-label="Page">
+          <a href="/">Home</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
+      </section>
+    </main>
+  </body>
+  </html>

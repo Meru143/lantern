@@ -1,0 +1,17 @@
+.git
+.github
+.agent
+.agents
+.claude
+.devcontainer
+bin
+dist
+docs
+test
+*.db
+*.db-shm
+*.db-wal
+*.lantern
+*.exe
+coverage.out
+skills-lock.json

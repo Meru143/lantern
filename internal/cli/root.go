@@ -5,27 +5,37 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/Meru143/lantern/internal/config"
 	"github.com/Meru143/lantern/internal/store"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
-	cfgFile   string
-	verbose   bool
-	appConfig *config.Config
+	cfgFile          string
+	verbose          bool
+	appConfig        *config.Config
+	configuredLogger *zap.Logger
 )
 
 var rootCmd = &cobra.Command{
 	Use:   "lantern",
 	Short: "Local observability platform",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		if err := configureLogger(verbose); err != nil {
+			return err
+		}
+
 		cfg, err := config.Load(cfgFile)
 		if err != nil {
-			cobra.CheckErr(err)
+			return err
 		}
 		appConfig = cfg
+
+		return nil
 	},
 }
 
@@ -39,6 +49,12 @@ func init() {
 
 // Execute runs the root lantern command.
 func Execute() {
+	defer func() {
+		if configuredLogger != nil {
+			_ = configuredLogger.Sync()
+		}
+	}()
+
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
@@ -104,4 +120,42 @@ func runClear(cmd *cobra.Command, args []string) error {
 	defer db.Close()
 
 	return store.RunMigrations(db)
+}
+
+func configureLogger(verbose bool) error {
+	level, err := resolveLogLevel(verbose)
+	if err != nil {
+		return err
+	}
+
+	loggerConfig := zap.NewProductionConfig()
+	loggerConfig.Level = zap.NewAtomicLevelAt(level)
+	loggerConfig.EncoderConfig.TimeKey = ""
+
+	logger, err := loggerConfig.Build()
+	if err != nil {
+		return fmt.Errorf("build logger: %w", err)
+	}
+
+	configuredLogger = logger
+	zap.ReplaceGlobals(logger)
+	return nil
+}
+
+func resolveLogLevel(verbose bool) (zapcore.Level, error) {
+	if verbose {
+		return zapcore.DebugLevel, nil
+	}
+
+	rawLevel := strings.TrimSpace(os.Getenv("LOG_LEVEL"))
+	if rawLevel == "" {
+		return zapcore.WarnLevel, nil
+	}
+
+	var level zapcore.Level
+	if err := level.UnmarshalText([]byte(strings.ToLower(rawLevel))); err != nil {
+		return zapcore.WarnLevel, fmt.Errorf("invalid LOG_LEVEL %q: %w", rawLevel, err)
+	}
+
+	return level, nil
 }

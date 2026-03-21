@@ -33,7 +33,8 @@ func TestRouterServesEmbeddedIndex(t *testing.T) {
 	body, err := io.ReadAll(response.Body)
 	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, response.StatusCode)
-	require.Contains(t, string(body), "<title>lantern</title>")
+	require.Contains(t, string(body), "<title>lantern | Local OTLP trace and log explorer</title>")
+	require.Contains(t, string(body), "Point your OTEL exporter at localhost:4317")
 }
 
 func TestTracesHandlersReturnSummariesAndTree(t *testing.T) {

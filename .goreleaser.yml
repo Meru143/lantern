@@ -1,0 +1,77 @@
+version: 2
+
+project_name: lantern
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: lantern
+    main: ./cmd/lantern
+    binary: lantern
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w
+
+archives:
+  - id: lantern
+    ids:
+      - lantern
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-snapshot"
+
+release:
+  github:
+    owner: Meru143
+    name: lantern
+  draft: false
+  prerelease: auto
+
+dockers_v2:
+  - id: lantern
+    ids:
+      - lantern
+    dockerfile: Dockerfile.release
+    images:
+      - ghcr.io/meru143/lantern
+    tags:
+      - "v{{ .Version }}"
+      - latest
+    labels:
+      "org.opencontainers.image.title": "{{ .ProjectName }}"
+      "org.opencontainers.image.description": "Local observability platform for developer environments"
+      "org.opencontainers.image.created": "{{ .Date }}"
+      "org.opencontainers.image.revision": "{{ .FullCommit }}"
+      "org.opencontainers.image.version": "{{ .Version }}"
+      "org.opencontainers.image.source": "https://github.com/Meru143/lantern"
+    platforms:
+      - linux/amd64
+      - linux/arm64
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"

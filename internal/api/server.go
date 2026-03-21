@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"net"
 	"net/http"
@@ -87,7 +88,9 @@ func (s *serverState) routes() http.Handler {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
+	router.Use(middleware.Compress(5, "text/html", "text/css", "application/javascript", "application/json", "image/svg+xml"))
 	router.Use(corsMiddleware)
+	router.Use(securityHeadersMiddleware)
 
 	router.Route("/api", func(api chi.Router) {
 		api.Get("/traces", s.listTraces)
@@ -101,16 +104,63 @@ func (s *serverState) routes() http.Handler {
 	})
 
 	router.Get("/", s.serveIndex)
+	router.Get("/about", s.servePage("about.html", true))
+	router.Get("/contact", s.servePage("contact.html", true))
+	router.Get("/privacy", s.servePage("privacy.html", true))
+	router.Get("/robots.txt", s.servePage("robots.txt", true))
+	router.Get("/sitemap.xml", s.serveSitemap)
 
-	fileServer := http.FileServer(http.FS(webassets.Files))
-	router.Handle("/app.js", fileServer)
-	router.Handle("/style.css", fileServer)
+	router.Get("/app.js", s.servePage("app.js", false))
+	router.Get("/style.css", s.servePage("style.css", false))
+	router.Get("/favicon.svg", s.servePage("favicon.svg", false))
 
 	return router
 }
 
 func (s *serverState) serveIndex(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "public, max-age=300")
 	http.ServeFileFS(w, r, webassets.Files, "index.html")
+}
+
+func (s *serverState) servePage(path string, html bool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if html {
+			w.Header().Set("Cache-Control", "public, max-age=300")
+		} else {
+			w.Header().Set("Cache-Control", "public, max-age=604800, immutable")
+		}
+		http.ServeFileFS(w, r, webassets.Files, path)
+	}
+}
+
+type urlSet struct {
+	XMLName xml.Name  `xml:"urlset"`
+	Xmlns   string    `xml:"xmlns,attr"`
+	URLs    []siteURL `xml:"url"`
+}
+
+type siteURL struct {
+	Loc string `xml:"loc"`
+}
+
+func (s *serverState) serveSitemap(w http.ResponseWriter, r *http.Request) {
+	baseURL := "http://" + r.Host
+	payload := urlSet{
+		Xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9",
+		URLs: []siteURL{
+			{Loc: baseURL + "/"},
+			{Loc: baseURL + "/about"},
+			{Loc: baseURL + "/contact"},
+			{Loc: baseURL + "/privacy"},
+		},
+	}
+
+	w.Header().Set("Content-Type", "application/xml; charset=utf-8")
+	w.Header().Set("Cache-Control", "public, max-age=300")
+	if _, err := w.Write([]byte(xml.Header)); err != nil {
+		return
+	}
+	_ = xml.NewEncoder(w).Encode(payload)
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
@@ -149,6 +199,17 @@ func corsMiddleware(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusNoContent)
 			return
 		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func securityHeadersMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self' ws: wss:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("Referrer-Policy", "no-referrer")
+		w.Header().Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
 		next.ServeHTTP(w, r)
 	})
 }

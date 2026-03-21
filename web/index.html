@@ -3,7 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>lantern</title>
+    <title>lantern | Local OTLP trace and log explorer</title>
+    <meta
+      name="description"
+      content="lantern is a local observability UI for traces, logs, services, queries, and grouped failures from a single OTLP receiver."
+    />
+    <link rel="canonical" href="/" />
+    <meta property="og:title" content="lantern | Local OTLP trace and log explorer" />
+    <meta
+      property="og:description"
+      content="Point your OTEL exporter at localhost:4317 and inspect traces, logs, services, queries, and grouped errors from one local binary."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/favicon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="lantern | Local OTLP trace and log explorer" />
+    <meta
+      name="twitter:description"
+      content="A local-first observability UI for OpenTelemetry traces and logs."
+    />
+    <meta name="author" content="lantern maintainers" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
@@ -82,7 +102,7 @@
               <p>Click a trace to inspect a stitched waterfall timeline.</p>
             </div>
             <div class="table-wrap">
-              <table>
+              <table aria-label="Trace list">
                 <thead>
                   <tr>
                     <th><button class="sort-button" data-trace-sort="service" type="button">Service</button></th>
@@ -92,7 +112,9 @@
                     <th><button class="sort-button" data-trace-sort="time" type="button">Time</button></th>
                   </tr>
                 </thead>
-                <tbody id="traces-table"></tbody>
+                <tbody id="traces-table">
+                  <tr><td class="empty" colspan="5">No traces yet. Point your OTEL exporter at localhost:4317.</td></tr>
+                </tbody>
               </table>
             </div>
             <div class="detail-grid">
@@ -119,7 +141,7 @@
               <p>Chronological service logs with trace correlation.</p>
             </div>
             <div class="table-wrap">
-              <table>
+              <table aria-label="Unified logs">
                 <thead>
                   <tr>
                     <th>Time</th>
@@ -129,7 +151,9 @@
                     <th>Trace</th>
                   </tr>
                 </thead>
-                <tbody id="logs-table"></tbody>
+                <tbody id="logs-table">
+                  <tr><td class="empty" colspan="5">No matching logs.</td></tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -148,7 +172,7 @@
               <p>Grouped exceptions across spans, services, and time.</p>
             </div>
             <div class="table-wrap">
-              <table>
+              <table aria-label="Grouped errors">
                 <thead>
                   <tr>
                     <th>Type</th>
@@ -159,7 +183,9 @@
                     <th>Services</th>
                   </tr>
                 </thead>
-                <tbody id="errors-table"></tbody>
+                <tbody id="errors-table">
+                  <tr><td class="empty" colspan="6">No grouped errors.</td></tr>
+                </tbody>
               </table>
             </div>
             <pre id="error-detail" class="json-view">Select an error group to inspect its sample span.</pre>
@@ -171,7 +197,7 @@
               <p>Normalized SQL grouped by latency and repeat count.</p>
             </div>
             <div class="table-wrap">
-              <table>
+              <table aria-label="Query analysis">
                 <thead>
                   <tr>
                     <th>SQL</th>
@@ -181,12 +207,23 @@
                     <th>Max</th>
                   </tr>
                 </thead>
-                <tbody id="queries-table"></tbody>
+                <tbody id="queries-table">
+                  <tr><td class="empty" colspan="5">No database spans detected yet.</td></tr>
+                </tbody>
               </table>
             </div>
           </div>
         </section>
       </main>
+
+      <footer class="site-footer">
+        <p class="footer-copy">lantern is a local-first observability workspace for OpenTelemetry debugging on developer machines.</p>
+        <nav class="footer-links" aria-label="Secondary">
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
+      </footer>
     </div>
 
     <script src="/app.js" defer></script>

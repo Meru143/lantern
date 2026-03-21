@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>lantern privacy</title>
+    <meta
+      name="description"
+      content="Privacy expectations for lantern, a local observability tool that stores telemetry on the developer machine."
+    />
+    <link rel="canonical" href="/privacy" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="app-shell content-page">
+      <section class="panel prose-card">
+        <p class="eyebrow">Privacy</p>
+        <h1>lantern stores debugging data on the machine that runs it.</h1>
+        <p>
+          The default workflow receives telemetry over OTLP, writes it into a local SQLite database, and serves the UI
+          from the same process. The project does not require a hosted backend to inspect traces, logs, query spans, or
+          grouped failures during day-to-day debugging.
+        </p>
+        <p>
+          Snapshot bundles are explicit exports. Review them before sharing because they may contain request names,
+          attribute values, stack traces, or log payloads copied from your application. The `lantern clear` command wipes
+          the local store when you want to remove retained data from the current machine.
+        </p>
+        <nav class="footer-links" aria-label="Page">
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </section>
+    </main>
+  </body>
+  </html>
