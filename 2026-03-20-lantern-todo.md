@@ -40,21 +40,21 @@
 - [x] `go get go.uber.org/zap@v1.27.0`
 - [x] `go get github.com/stretchr/testify@v1.10.0`
 - [x] `go get github.com/testcontainers/testcontainers-go@v0.35.0`
-- [ ] Run `go mod tidy`
+- [x] Run `go mod tidy`
 
 ### 1.3 Root CLI
-- [ ] Create `internal/cli/root.go` with `var rootCmd = &cobra.Command{Use: "lantern"}`
-- [ ] Add `Execute()` function calling `rootCmd.Execute()` with `os.Exit(1)` on error
-- [ ] Add persistent flags: `--config`, `--verbose`
-- [ ] Add `PersistentPreRun` loading config via `config.Load()`
+- [x] Create `internal/cli/root.go` with `var rootCmd = &cobra.Command{Use: "lantern"}`
+- [x] Add `Execute()` function calling `rootCmd.Execute()` with `os.Exit(1)` on error
+- [x] Add persistent flags: `--config`, `--verbose`
+- [x] Add `PersistentPreRun` loading config via `config.Load()`
 
 ### 1.4 Config Loader
-- [ ] Create `internal/config/loader.go` with `Config` struct
-- [ ] Fields: `OTLPGRPCPort int`, `OTLPHTTPPort int`, `UIPort int`, `Retention string`, `DBPath string`
-- [ ] `viper.SetDefault` for all fields: 4317, 4318, 4000, "24h", "~/.lantern/data.db"
-- [ ] Bind env vars: `LANTERN_OTLP_GRPC_PORT`, `LANTERN_OTLP_HTTP_PORT`, etc.
-- [ ] Expand `~` in DBPath using `os.UserHomeDir()`
-- [ ] Export `Load(cfgFile string) (*Config, error)`
+- [x] Create `internal/config/loader.go` with `Config` struct
+- [x] Fields: `OTLPGRPCPort int`, `OTLPHTTPPort int`, `UIPort int`, `Retention string`, `DBPath string`
+- [x] `viper.SetDefault` for all fields: 4317, 4318, 4000, "24h", "~/.lantern/data.db"
+- [x] Bind env vars: `LANTERN_OTLP_GRPC_PORT`, `LANTERN_OTLP_HTTP_PORT`, etc.
+- [x] Expand `~` in DBPath using `os.UserHomeDir()`
+- [x] Export `Load(cfgFile string) (*Config, error)`
 
 ### 1.5 SQLite Database Setup
 - [ ] Create `internal/store/db.go`
