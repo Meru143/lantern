@@ -83,6 +83,7 @@ pre {
 }
 
 .hero-copy {
+  overflow: hidden;
   padding: 38px;
 }
 
@@ -103,7 +104,7 @@ h3 {
 
 h1 {
   max-width: 11ch;
-  font-size: clamp(3rem, 7vw, 5.2rem);
+  font-size: clamp(2.78rem, 6.35vw, 4.85rem);
   line-height: 0.96;
   letter-spacing: -0.06em;
 }
@@ -164,7 +165,9 @@ h1 {
 
 .hero-visual {
   display: grid;
-  align-content: start;
+  align-content: center;
+  align-self: center;
+  height: fit-content;
   padding: 12px;
 }
 
@@ -178,7 +181,7 @@ h1 {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 560px;
+  max-height: 640px;
   object-fit: contain;
 }
 
