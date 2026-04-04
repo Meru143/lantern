@@ -66,6 +66,7 @@ pre {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 24px;
+  align-items: start;
   padding: 24px 0 44px;
 }
 
@@ -162,10 +163,25 @@ h1 {
 }
 
 .hero-visual {
-  overflow: hidden;
+  display: grid;
+  align-content: start;
+  padding: 12px;
 }
 
-.hero-visual img,
+.hero-visual-frame {
+  overflow: hidden;
+  border-radius: 22px;
+  background: #071c18;
+}
+
+.hero-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+}
+
 .shot img {
   display: block;
   width: 100%;
