@@ -210,20 +210,26 @@ h2 {
 }
 
 .tour-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .shot {
   overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(260px, 0.38fr);
   padding: 0;
 }
 
 .shot img {
-  aspect-ratio: 16 / 10;
+  min-height: 280px;
+  aspect-ratio: auto;
 }
 
 .shot div {
-  padding: 18px 20px 22px;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 24px;
 }
 
 .install-layout {
@@ -241,8 +247,11 @@ h2 {
 @media (max-width: 980px) {
   .hero,
   .card-grid,
-  .tour-grid,
   .install-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .shot {
     grid-template-columns: 1fr;
   }
 
