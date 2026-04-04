@@ -1,6 +1,10 @@
 # lantern
 
-`lantern` is a local observability platform for developer environments. It runs as a single Go binary, accepts OTLP traces and logs on the standard local ports, stores them in SQLite, and serves a browser UI plus a terminal UI for inspection.
+`lantern` is a local-first observability platform for developer environments. It runs as a single Go binary, accepts OTLP traces and logs on the standard local ports, stores them in SQLite, and serves a browser UI plus a terminal UI for inspection.
+
+The pitch is intentionally simple: point your OpenTelemetry exporter at `localhost:4317`, run one binary, and inspect traces plus logs without booting a full local observability stack.
+
+Live page: [merup.me/lantern](https://merup.me/lantern/)
 
 ![lantern demo](docs/images/lantern-demo.gif)
 

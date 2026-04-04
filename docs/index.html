@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>lantern | Local-first observability for OpenTelemetry</title>
+    <meta
+      name="description"
+      content="Run one binary, point your OTEL exporter at localhost:4317, and inspect traces, logs, service edges, queries, and grouped errors."
+    />
+    <meta property="og:title" content="lantern | Local-first observability for OpenTelemetry" />
+    <meta
+      property="og:description"
+      content="A single local Go binary for OTLP traces and logs with a browser UI and terminal UI."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://merup.me/lantern/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="site-header">
+        <a class="brand" href="https://github.com/Meru143/lantern">lantern</a>
+        <nav class="nav">
+          <a href="#why">Why</a>
+          <a href="#tour">Tour</a>
+          <a href="#install">Install</a>
+          <a href="https://github.com/Meru143/lantern">GitHub</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Local observability without the local stack</p>
+            <h1>OpenTelemetry traces and logs. One binary. Your laptop.</h1>
+            <p class="lede">
+              Lantern accepts OTLP on the standard local ports, stores traces and logs
+              in SQLite, and gives you both a browser UI and terminal UI for inspection.
+              No Jaeger plus Loki plus Grafana setup. No separate hosted dependency.
+            </p>
+            <div class="actions">
+              <a class="button primary" href="https://github.com/Meru143/lantern">
+                Star on GitHub
+              </a>
+              <a class="button secondary" href="#install">Install lantern</a>
+            </div>
+            <div class="proof-pills">
+              <span>OTLP gRPC + HTTP</span>
+              <span>browser UI</span>
+              <span>terminal UI</span>
+              <span>SQLite storage</span>
+              <span>local-first</span>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <img
+              src="./images/lantern-demo.gif"
+              alt="Lantern demo showing traces, logs, and UI flow"
+            />
+          </div>
+        </section>
+
+        <section id="why" class="section">
+          <div class="section-head">
+            <p class="eyebrow">Why Lantern</p>
+            <h2>Collapse the local observability stack into one command.</h2>
+            <p>
+              Jaeger gives you traces. Loki gives you logs. Grafana expects everything
+              around it. Lantern is for the moment when that stack is too heavy for a
+              laptop debugging loop and you just want your OpenTelemetry exporter pointed
+              at localhost.
+            </p>
+          </div>
+
+          <div class="card-grid">
+            <article class="feature">
+              <h3>Standard local ports</h3>
+              <p>
+                Keep your OTEL exporter pointed at <code>localhost:4317</code> and start
+                debugging instead of translating every example into a custom local stack.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>Logs and traces together</h3>
+              <p>
+                Lantern is useful because it keeps trace waterfalls, grouped errors, and
+                log streams in one local surface instead of splitting context across apps.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>SQLite-backed history</h3>
+              <p>
+                Persist local runs long enough to compare behavior without needing a
+                remote collector or a managed observability account.
+              </p>
+            </article>
+            <article class="feature">
+              <h3>Browser UI plus TUI</h3>
+              <p>
+                Use the browser when you want a richer inspection surface, and keep the
+                terminal UI nearby for keyboard-first debugging.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="tour" class="section">
+          <div class="section-head">
+            <p class="eyebrow">Product tour</p>
+            <h2>Follow a request from trace waterfall to grouped error.</h2>
+            <p>
+              The page below leans on real UI captures already in the repo so the product
+              proof matches what Lantern actually ships today.
+            </p>
+          </div>
+
+          <div class="tour-grid">
+            <article class="shot">
+              <img src="./images/trace-waterfall.png" alt="Lantern trace waterfall view" />
+              <div>
+                <h3>Trace waterfall</h3>
+                <p>Inspect spans and request timing without leaving your local environment.</p>
+              </div>
+            </article>
+            <article class="shot">
+              <img src="./images/log-stream.png" alt="Lantern log stream view" />
+              <div>
+                <h3>Log stream</h3>
+                <p>Keep logs close to traces so debugging does not become a context switch.</p>
+              </div>
+            </article>
+            <article class="shot">
+              <img src="./images/error-groups.png" alt="Lantern grouped errors view" />
+              <div>
+                <h3>Error groups</h3>
+                <p>Cluster repeated failures into something you can triage quickly.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="install" class="section">
+          <div class="section-head">
+            <p class="eyebrow">Install</p>
+            <h2>Point your exporter at localhost and start capturing.</h2>
+            <p>
+              Lantern is intentionally simple to start because the biggest friction in
+              observability tooling is setup cost before the first useful signal appears.
+            </p>
+          </div>
+
+          <div class="install-layout">
+            <pre><code>go install github.com/Meru143/lantern/cmd/lantern@latest
+lantern serve --no-tui
+
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+./your-app</code></pre>
+            <pre><code>Open http://localhost:4000
+
+Inspect:
+- traces
+- logs
+- services
+- queries
+- grouped errors</code></pre>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
