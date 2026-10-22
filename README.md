@@ -31,11 +31,7 @@ Install the current CLI directly from source:
 go install github.com/Meru143/lantern/cmd/lantern@latest
 ```
 
-Homebrew packaging is planned for the first tagged release:
-
-```bash
-brew install lantern
-```
+Prebuilt archives for Linux, macOS, and Windows, with a `checksums.txt`, are attached to each [GitHub release](https://github.com/Meru143/lantern/releases). There is no Homebrew formula yet; `brew install lantern` installs an unrelated app.
 
 Run the container image when you want an isolated local instance:
 
